@@ -54,7 +54,7 @@ func main() {
 
 	printData(&colNames, &dataSet)
 	if timer {
-		fmt.Printf("query time: %s\n", elapsed.String())
+		fmt.Printf("query: %s\ntime: %s\n", stmt, elapsed.String())
 	}
 }
 
