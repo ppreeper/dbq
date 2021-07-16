@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/ppreeper/dbq/database"
 	"github.com/ppreeper/pad"
@@ -12,9 +13,11 @@ import (
 func main() {
 	// flags
 	var dbase, stmt string
+	var timer bool
 
 	flag.StringVar(&dbase, "db", "", "database")
 	flag.StringVar(&stmt, "q", "", "sql query")
+	flag.BoolVar(&timer, "t", false, "sql timer")
 	flag.Parse()
 
 	if dbase == "" {
@@ -45,9 +48,14 @@ func main() {
 	}()
 	checkErr(err)
 
+	start := time.Now()
 	colNames, dataSet := queryData(sdb, stmt)
+	elapsed := time.Since(start)
 
 	printData(&colNames, &dataSet)
+	if timer {
+		fmt.Printf("query time: %s\n", elapsed.String())
+	}
 }
 
 func queryData(sdb *database.Database, stmt string) (colNames []string, dataSet []interface{}) {
